@@ -1,0 +1,5 @@
+**/target/
+.git/
+reports/
+dist/
+.idea/

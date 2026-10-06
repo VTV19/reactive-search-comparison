@@ -1,0 +1,56 @@
+server:
+  port: 8081
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  shutdown: graceful
+  tomcat:
+    threads:
+      max: ${TOMCAT_MAX_THREADS:200}
+      min-spare: ${TOMCAT_MIN_SPARE:10}
+spring:
+  application:
+    name: search-mvc
+  main:
+    web-application-type: servlet
+  lifecycle:
+    timeout-per-shutdown-phase: 10s
+  data:
+    mongodb:
+      uri: "${MONGODB_URI:mongodb://localhost:27017/search_mvc?timeoutMS=3000&connectTimeoutMS=1000&serverSelectionTimeoutMS=2000&maxPoolSize=64&retryReads=false&retryWrites=false&w=majority&journal=true}"
+  threads:
+    virtual:
+      enabled: false
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-store: true
+catalog:
+  seed:
+    enabled: ${CATALOG_SEED_ENABLED:true}
+search:
+  max-concurrent: ${SEARCH_MAX_CONCURRENT:64}
+metadata:
+  url: ${METADATA_URL:http://localhost:9080}
+  timeout-ms: ${METADATA_TIMEOUT_MS:1000}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,mongo
+  health:
+    diskspace:
+      enabled: false
+logging:
+  level:
+    ru.hse.search: INFO

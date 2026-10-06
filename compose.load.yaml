@@ -1,0 +1,99 @@
+name: java-search-load
+services:
+  mongo:
+    image: mongo:8.0.32
+    command: ["mongod", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.5"]
+    cpus: 2.0
+    mem_limit: 2g
+    volumes:
+      - load-data:/data/db
+      - type: bind
+        source: ./data/documents.json
+        target: /fixtures/documents.json
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      disable: true
+
+  metadata:
+    image: eclipse-temurin:21-jre-noble
+    init: true
+    command: ["java", "-jar", "/app/metadata-service.jar"]
+    cpus: 1.0
+    mem_limit: 512m
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      JAVA_TOOL_OPTIONS: "-Xms64m -Xmx256m -XX:ActiveProcessorCount=1"
+      SPRING_THREADS_VIRTUAL_ENABLED: "true"
+      SPRING_MAIN_KEEP_ALIVE: "true"
+      LOGGING_LEVEL_RU_HSE_SEARCH: WARN
+    volumes:
+      - type: bind
+        source: ./metadata-service/target/metadata-service.jar
+        target: /app/metadata-service.jar
+        read_only: true
+        bind:
+          create_host_path: false
+    read_only: true
+    tmpfs: ["/tmp"]
+    ports: ["127.0.0.1:29080:9080"]
+    healthcheck:
+      disable: true
+
+  app:
+    image: eclipse-temurin:21-jre-noble
+    init: true
+    command: ["java", "-jar", "/app/search.jar"]
+    cpus: 2.0
+    mem_limit: 1g
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: "8080"
+      JAVA_TOOL_OPTIONS: "-Xms128m -Xmx512m -XX:ActiveProcessorCount=2 -Dreactor.netty.ioWorkerCount=${REACTOR_IO_WORKERS:-4} ${JVM_EXTRA_OPTS:-}"
+      MONGODB_URI: "mongodb://mongo:27017/load_catalog?timeoutMS=3000&connectTimeoutMS=1000&serverSelectionTimeoutMS=2000&maxPoolSize=${MONGO_POOL_SIZE:-64}&retryReads=false&retryWrites=false&w=majority&journal=true"
+      METADATA_URL: "http://metadata:9080"
+      METADATA_TIMEOUT_MS: "1000"
+      SEARCH_MAX_CONCURRENT: "${SEARCH_LIMIT:-64}"
+      SPRING_THREADS_VIRTUAL_ENABLED: "${MVC_VIRTUAL_THREADS:-false}"
+      SPRING_MAIN_KEEP_ALIVE: "${MVC_KEEP_ALIVE:-false}"
+      TOMCAT_MAX_THREADS: "${TOMCAT_MAX_THREADS:-200}"
+      LOGGING_LEVEL_RU_HSE_SEARCH: WARN
+    volumes:
+      - type: bind
+        source: "${LOAD_JAR:-./search-mvc/target/search-mvc.jar}"
+        target: /app/search.jar
+        read_only: true
+        bind:
+          create_host_path: false
+    read_only: true
+    tmpfs: ["/tmp"]
+    ports: ["127.0.0.1:28081:8080"]
+    healthcheck:
+      disable: true
+    stop_grace_period: 15s
+
+  k6:
+    image: grafana/k6:1.8.1
+    profiles: ["load"]
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    cpus: 2.0
+    mem_limit: 1g
+    environment:
+      K6_NO_USAGE_REPORT: "true"
+      BASE_URL: "http://app:8080"
+      IMPLEMENTATION: "${EXPECTED_IMPLEMENTATION:-mvc}"
+      VARIANT: "${VARIANT:-mvc}"
+      PROFILE: "${PROFILE:-database}"
+      RATE: "${RATE:-20}"
+      WARMUP_SECONDS: "${WARMUP_SECONDS:-60}"
+      DURATION_SECONDS: "${DURATION_SECONDS:-180}"
+      VUS: "${VUS:-128}"
+      P95_MS: "${P95_MS:-1000}"
+    volumes:
+      - ./tests/load:/scripts:ro
+      - "${LOAD_OUTPUT:-./reports/load}:/results"
+    working_dir: /scripts
+
+volumes:
+  load-data:

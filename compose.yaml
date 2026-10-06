@@ -1,0 +1,155 @@
+name: java-search-release
+services:
+  mongo:
+    image: mongo:8.0.32
+    volumes:
+    - mongo-data:/data/db
+    healthcheck:
+      test:
+      - CMD
+      - mongosh
+      - --quiet
+      - --eval
+      - 'quit(db.adminCommand(''ping'').ok ? 0 : 1)'
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+  metadata:
+    image: eclipse-temurin:21-jre-noble
+    init: true
+    working_dir: /app
+    command:
+    - java
+    - -jar
+    - /app/metadata-service.jar
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      JAVA_TOOL_OPTIONS: -Xms64m -Xmx256m
+    volumes:
+    - type: bind
+      source: ./metadata-service/target/metadata-service.jar
+      target: /app/metadata-service.jar
+      read_only: true
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./search-core/target/search-core.jar
+      target: /app/search-core.jar
+      read_only: true
+      bind:
+        create_host_path: false
+    read_only: true
+    tmpfs:
+    - /tmp
+    healthcheck:
+      test:
+      - CMD
+      - java
+      - -cp
+      - /app/search-core.jar
+      - ru.hse.search.core.HttpProbe
+      - http://127.0.0.1:9080/actuator/health
+      interval: 5s
+      timeout: 6s
+      retries: 20
+      start_period: 25s
+    stop_grace_period: 15s
+    ports:
+    - 127.0.0.1:19080:9080
+  mvc:
+    image: eclipse-temurin:21-jre-noble
+    init: true
+    working_dir: /app
+    command:
+    - java
+    - -jar
+    - /app/search-mvc.jar
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx512m
+      MONGODB_URI: mongodb://mongo:27017/search_mvc?timeoutMS=3000&connectTimeoutMS=1000&serverSelectionTimeoutMS=2000&maxPoolSize=64&retryReads=false&retryWrites=false&w=majority&journal=true
+      METADATA_URL: http://metadata:9080
+    volumes:
+    - type: bind
+      source: ./search-mvc/target/search-mvc.jar
+      target: /app/search-mvc.jar
+      read_only: true
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./search-core/target/search-core.jar
+      target: /app/search-core.jar
+      read_only: true
+      bind:
+        create_host_path: false
+    read_only: true
+    tmpfs:
+    - /tmp
+    healthcheck:
+      test:
+      - CMD
+      - java
+      - -cp
+      - /app/search-core.jar
+      - ru.hse.search.core.HttpProbe
+      - http://127.0.0.1:8081/actuator/health/readiness
+      interval: 5s
+      timeout: 6s
+      retries: 20
+      start_period: 25s
+    stop_grace_period: 15s
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+    - 127.0.0.1:18081:8081
+  webflux:
+    image: eclipse-temurin:21-jre-noble
+    init: true
+    working_dir: /app
+    command:
+    - java
+    - -jar
+    - /app/search-webflux.jar
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      JAVA_TOOL_OPTIONS: -Xms128m -Xmx512m
+      MONGODB_URI: mongodb://mongo:27017/search_webflux?timeoutMS=3000&connectTimeoutMS=1000&serverSelectionTimeoutMS=2000&maxPoolSize=64&retryReads=false&retryWrites=false&w=majority&journal=true
+      METADATA_URL: http://metadata:9080
+    volumes:
+    - type: bind
+      source: ./search-webflux/target/search-webflux.jar
+      target: /app/search-webflux.jar
+      read_only: true
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./search-core/target/search-core.jar
+      target: /app/search-core.jar
+      read_only: true
+      bind:
+        create_host_path: false
+    read_only: true
+    tmpfs:
+    - /tmp
+    healthcheck:
+      test:
+      - CMD
+      - java
+      - -cp
+      - /app/search-core.jar
+      - ru.hse.search.core.HttpProbe
+      - http://127.0.0.1:8082/actuator/health/readiness
+      interval: 5s
+      timeout: 6s
+      retries: 20
+      start_period: 25s
+    stop_grace_period: 15s
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+    - 127.0.0.1:18082:8082
+volumes:
+  mongo-data: {}

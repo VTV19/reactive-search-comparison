@@ -1,0 +1,43 @@
+[
+  {
+    "name": "java",
+    "q": "java",
+    "mode": "ANY"
+  },
+  {
+    "name": "spring",
+    "q": "spring",
+    "mode": "ANY"
+  },
+  {
+    "name": "reactor",
+    "q": "reactor",
+    "mode": "ANY"
+  },
+  {
+    "name": "mongodb",
+    "q": "mongodb",
+    "mode": "ANY"
+  },
+  {
+    "name": "docker",
+    "q": "docker",
+    "mode": "ANY"
+  },
+  {
+    "name": "junit",
+    "q": "junit",
+    "mode": "ANY"
+  },
+  {
+    "name": "spring-data-phrase",
+    "q": "spring data",
+    "mode": "PHRASE"
+  },
+  {
+    "name": "java-category",
+    "q": "java",
+    "category": "JAVA",
+    "mode": "ANY"
+  }
+]

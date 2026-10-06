@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru" data-implementation="@applicationKey@" data-version="@project.version@">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="application-name" content="@applicationName@">
+  <title>@applicationName@ — Поисковый каталог</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/assets/style-v3.css">
+  <script>
+    // This small bootstrap also works when the main script cannot be downloaded.
+    window.catalogUiFail = function (message) {
+      function show() {
+        var status = document.getElementById('connection-status');
+        if (status) status.textContent = message;
+        var banner = document.getElementById('startup-error');
+        if (banner) { banner.textContent = message; banner.hidden = false; }
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show, {once: true});
+      else show();
+    };
+    window.addEventListener('error', function (event) {
+      if (event.target instanceof HTMLScriptElement || event.error)
+        window.catalogUiFail('Ошибка загрузки интерфейса. Обновите страницу; подробности доступны в консоли браузера.');
+    }, true);
+    window.catalogStartupTimer = setTimeout(function () {
+      if (!window.catalogUiStarted)
+        window.catalogUiFail('Интерфейс не загрузился. Проверьте адрес приложения и обновите страницу.');
+    }, 5000);
+    if (location.protocol === 'file:')
+      window.catalogUiFail('Откройте приложение по HTTP после запуска сервера, а не файл index.html.');
+  </script>
+  <script src="/assets/app-v3.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">Java · Spring · MongoDB</p>
+        <h1>Поисковый каталог</h1>
+        <p id="app-info"><strong>@applicationName@</strong> · версия @project.version@</p>
+      </div>
+      <button id="add-document" type="button" disabled>Добавить материал</button>
+    </header>
+
+    <div class="connection">
+      <span id="connection-status" role="status">Загрузка интерфейса…</span>
+      <button id="retry-connect" type="button" class="secondary" disabled>Обновить соединение</button>
+    </div>
+    <div id="startup-error" class="notice error" role="alert" hidden></div>
+    <noscript><p class="notice error">Для поиска и редактирования включите JavaScript в браузере.</p></noscript>
+
+    <section class="panel" aria-labelledby="search-heading">
+      <h2 id="search-heading">Найти материал</h2>
+      <form id="search-form">
+        <label for="query">Поисковый запрос</label>
+        <div class="search-line">
+          <input id="query" name="q" maxlength="200" placeholder="Например, Spring WebFlux" autocomplete="off">
+          <button id="search-button" type="submit" disabled>Найти</button>
+          <button id="reset-search" class="secondary" type="button" disabled>Весь каталог</button>
+        </div>
+        <div class="filters">
+          <label>Категория<select id="category"><option value="">Все категории</option></select></label>
+          <label>Совпадение<select id="mode"><option value="ANY">Любое слово</option><option value="PHRASE">Фраза</option></select></label>
+          <label>Порядок<select id="sort"><option value="RELEVANCE">По релевантности</option><option value="TITLE">По заголовку</option></select></label>
+          <label>На странице<select id="limit"><option>10</option><option>20</option><option>50</option></select></label>
+        </div>
+        <label class="checkbox"><input id="enrich" type="checkbox" checked> Добавлять руководство по категории</label>
+        <p class="hint">Пустой запрос открывает каталог. Поиск работает по заголовку и тексту, без загрузки сайтов по ссылкам.</p>
+      </form>
+    </section>
+
+    <div id="notice" class="notice" role="status" hidden></div>
+    <div class="results-heading"><h2>Материалы</h2><p id="result-summary" aria-live="polite"></p></div>
+    <section id="results" aria-label="Результаты поиска"></section>
+    <nav class="pagination" aria-label="Страницы результатов">
+      <button id="previous" class="secondary" type="button" disabled>Назад</button>
+      <span id="page-label"></span>
+      <button id="next" class="secondary" type="button" disabled>Вперёд</button>
+    </nav>
+
+    <details class="panel">
+      <summary>Состояние приложения</summary>
+      <p id="health">Нажмите «Обновить состояние» для получения данных.</p>
+      <dl id="metrics" class="metrics"></dl>
+      <button id="refresh-status" class="secondary" type="button">Обновить состояние</button>
+    </details>
+    <footer>Материалы хранятся в отдельной базе этой реализации. Доступ предусмотрен только с локального компьютера.</footer>
+  </main>
+
+  <dialog id="view-dialog">
+    <div class="dialog-heading"><h2 id="view-title"></h2><button id="close-view" class="secondary" type="button">Закрыть</button></div>
+    <p id="view-details" class="hint"></p>
+    <p id="view-text" class="document-text"></p>
+    <p><a id="view-source" target="_blank" rel="noopener noreferrer">Источник материала</a></p>
+    <div id="view-error" class="notice error" role="alert" hidden></div>
+    <div class="actions">
+      <button id="edit-document" type="button">Редактировать</button>
+      <button id="delete-document" class="danger" type="button">Удалить</button>
+    </div>
+  </dialog>
+
+  <dialog id="edit-dialog">
+    <div class="dialog-heading"><h2 id="edit-heading">Новый материал</h2>
+      <button id="close-edit" class="secondary" type="button">Закрыть</button></div>
+    <form id="edit-form">
+      <label>Заголовок<input id="edit-title" required maxlength="200"></label>
+      <label>Категория<select id="edit-category" required></select></label>
+      <label>Текст<textarea id="edit-text" required maxlength="20000" rows="8"></textarea></label>
+      <label>Ссылка на источник HTTPS<input id="edit-source" type="url" required maxlength="1000" placeholder="https://…"></label>
+      <div id="edit-error" class="notice error" role="alert" hidden></div>
+      <button id="save-document" type="submit">Сохранить</button>
+    </form>
+  </dialog>
+</body>
+</html>

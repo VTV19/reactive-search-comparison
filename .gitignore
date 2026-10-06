@@ -1,0 +1,13 @@
+**/target/
+reports/
+dist/
+**/__pycache__/
+**/.pytest_cache/
+*.pyc
+.idea/
+*.iml
+.DS_Store
+.env
+*.zip
+*.jfr
+hs_err_pid*.log

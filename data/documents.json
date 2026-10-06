@@ -1,0 +1,254 @@
+[
+  {
+    "id": "d001",
+    "title": "Java 21: классы record",
+    "category": "JAVA",
+    "text": "Классы record описывают носители данных. Для компонентов записи Java создаёт методы доступа, equals, hashCode и toString. В проекте записи используются для запросов и ответов API.",
+    "sourceUrl": "https://docs.oracle.com/en/java/javase/21/language/records.html"
+  },
+  {
+    "id": "d002",
+    "title": "Java: коллекции List, Set и Map",
+    "category": "JAVA",
+    "text": "List хранит последовательность элементов, Set исключает дубликаты, Map связывает ключи со значениями. Коллекции используются при подготовке запросов и формировании поисковой выдачи.",
+    "sourceUrl": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/package-summary.html"
+  },
+  {
+    "id": "d003",
+    "title": "Java: Stream API",
+    "category": "JAVA",
+    "text": "Stream API позволяет преобразовывать, фильтровать и собирать элементы коллекций. Поток Stream не является реактивным потоком Project Reactor.",
+    "sourceUrl": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html"
+  },
+  {
+    "id": "d004",
+    "title": "Java: исключения и try finally",
+    "category": "JAVA",
+    "text": "Конструкция try finally помогает освободить ресурс при нормальном завершении и при исключении. В обычной версии проекта она возвращает разрешение семафора.",
+    "sourceUrl": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html"
+  },
+  {
+    "id": "d005",
+    "title": "Java: Semaphore",
+    "category": "JAVA",
+    "text": "Семафор ограничивает число одновременных операций. Метод tryAcquire позволяет отказаться от работы без ожидания свободного разрешения; release возвращает разрешение.",
+    "sourceUrl": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Semaphore.html"
+  },
+  {
+    "id": "d006",
+    "title": "Java: виртуальные потоки",
+    "category": "JAVA",
+    "text": "Виртуальные потоки позволяют выполнять множество задач с блокирующим ожиданием. Это отдельная модель работы; обычная версия данного проекта использует платформенные потоки.",
+    "sourceUrl": "https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html"
+  },
+  {
+    "id": "d007",
+    "title": "Spring: внедрение зависимостей",
+    "category": "SPRING",
+    "text": "Контейнер Spring создаёт компоненты и передаёт им зависимости. Конструктор службы явно показывает, какие репозитории и клиенты нужны для её работы.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"
+  },
+  {
+    "id": "d008",
+    "title": "Spring Boot: автоконфигурация",
+    "category": "SPRING",
+    "text": "Spring Boot настраивает компоненты на основе зависимостей и параметров приложения. Starter подключает согласованный набор библиотек для выбранной возможности.",
+    "sourceUrl": "https://docs.spring.io/spring-boot/3.5/reference/using/auto-configuration.html"
+  },
+  {
+    "id": "d009",
+    "title": "Spring MVC: контроллеры REST",
+    "category": "SPRING",
+    "text": "Контроллер Spring MVC принимает HTTP-запрос и передаёт работу службе. REST API может возвращать объект, который преобразуется в JSON.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller.html"
+  },
+  {
+    "id": "d010",
+    "title": "Spring WebFlux: реактивные контроллеры",
+    "category": "SPRING",
+    "text": "Контроллер WebFlux может возвращать Mono или Flux. Для неблокирующего пути обработки реактивными должны быть и сетевые обращения к зависимостям.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/web/webflux/controller.html"
+  },
+  {
+    "id": "d011",
+    "title": "Spring: проверка входных данных",
+    "category": "SPRING",
+    "text": "Bean Validation задаёт ограничения полей через аннотации. Проверка Valid в контроллере помогает отклонить незаполненный заголовок и слишком длинный текст.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html"
+  },
+  {
+    "id": "d012",
+    "title": "Spring: WebClient",
+    "category": "SPRING",
+    "text": "WebClient выполняет HTTP-взаимодействия через реактивный API. Ответ можно преобразовать и обработать ошибку в цепочке Mono.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/web/webflux-webclient.html"
+  },
+  {
+    "id": "d013",
+    "title": "Spring: RestClient",
+    "category": "SPRING",
+    "text": "RestClient предоставляет синхронный API обращения к HTTP-сервисам. В проекте он используется обычной версией для получения дополнительных ссылок.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/integration/rest-clients.html"
+  },
+  {
+    "id": "d014",
+    "title": "Spring Boot: Actuator",
+    "category": "SPRING",
+    "text": "Actuator публикует состояние приложения и эксплуатационные показатели. В проекте доступны health, info и metrics; диагностические данные окружения не публикуются.",
+    "sourceUrl": "https://docs.spring.io/spring-boot/3.5/reference/actuator/endpoints.html"
+  },
+  {
+    "id": "d015",
+    "title": "Project Reactor: Mono",
+    "category": "REACTOR",
+    "text": "Mono представляет результат, содержащий не более одного значения, либо ошибку. Поисковый ответ реактивной версии передаётся через Mono.",
+    "sourceUrl": "https://projectreactor.io/docs/core/release/reference/coreFeatures/mono.html"
+  },
+  {
+    "id": "d016",
+    "title": "Project Reactor: Flux",
+    "category": "REACTOR",
+    "text": "Flux представляет последовательность значений и сигналы её завершения. Реактивный драйвер MongoDB возвращает найденные документы через Flux.",
+    "sourceUrl": "https://projectreactor.io/docs/core/release/reference/coreFeatures/flux.html"
+  },
+  {
+    "id": "d017",
+    "title": "Project Reactor: map и flatMap",
+    "category": "REACTOR",
+    "text": "map преобразует значение синхронно. flatMap связывает значение с другой реактивной операцией, например с запросом к базе данных или внешнему сервису.",
+    "sourceUrl": "https://projectreactor.io/docs/core/release/reference/apdx-operatorChoice.html"
+  },
+  {
+    "id": "d018",
+    "title": "Project Reactor: обработка ошибок",
+    "category": "REACTOR",
+    "text": "Оператор onErrorResume переключает цепочку на резервный результат. В проекте такая обработка применяется только к необязательному справочнику, но не к основной базе.",
+    "sourceUrl": "https://projectreactor.io/docs/core/release/reference/coreFeatures/error-handling.html"
+  },
+  {
+    "id": "d019",
+    "title": "Project Reactor: timeout",
+    "category": "REACTOR",
+    "text": "Оператор timeout ограничивает ожидание результата. Тайм-аут внешней зависимости превращается в явно отмеченную неполную выдачу, а не в бесконечное ожидание.",
+    "sourceUrl": "https://projectreactor.io/docs/core/release/reference/coreFeatures/error-handling.html"
+  },
+  {
+    "id": "d020",
+    "title": "Project Reactor: обратное давление",
+    "category": "REACTOR",
+    "text": "В Reactive Streams потребитель сообщает, сколько элементов готов получить. Такой механизм управления потоком не заменяет лимит входящих HTTP-запросов.",
+    "sourceUrl": "https://projectreactor.io/docs/core/release/reference/reactiveProgramming.html"
+  },
+  {
+    "id": "d021",
+    "title": "MongoDB: документы и коллекции",
+    "category": "MONGODB",
+    "text": "MongoDB хранит документы в коллекциях. В поисковом каталоге документ содержит заголовок, текст, категорию, ссылку на источник и версию.",
+    "sourceUrl": "https://docs.spring.io/spring-data/mongodb/reference/4.5/mongodb/mapping/mapping.html"
+  },
+  {
+    "id": "d022",
+    "title": "Spring Data: MongoRepository",
+    "category": "MONGODB",
+    "text": "MongoRepository предоставляет обычные операции сохранения, чтения и удаления документов. Его методы используются службой управления каталогом в MVC.",
+    "sourceUrl": "https://docs.spring.io/spring-data/mongodb/reference/4.5/repositories.html"
+  },
+  {
+    "id": "d023",
+    "title": "Spring Data: ReactiveMongoRepository",
+    "category": "MONGODB",
+    "text": "ReactiveMongoRepository предоставляет операции с результатами Mono и Flux. Реактивная версия использует его без преобразования блокирующего репозитория.",
+    "sourceUrl": "https://docs.spring.io/spring-data/mongodb/reference/4.5/repositories.html"
+  },
+  {
+    "id": "d024",
+    "title": "Spring Data: MongoTemplate и ReactiveMongoTemplate",
+    "category": "MONGODB",
+    "text": "Шаблоны MongoTemplate и ReactiveMongoTemplate позволяют задавать запросы через Query и Criteria. В проекте шаблоны обслуживают фильтрацию и страницы поиска.",
+    "sourceUrl": "https://docs.spring.io/spring-data/mongodb/reference/4.5/mongodb/template-query-operations.html"
+  },
+  {
+    "id": "d025",
+    "title": "MongoDB: полнотекстовый индекс",
+    "category": "MONGODB",
+    "text": "Текстовый индекс позволяет выполнять запросы text по заголовку и содержимому. В проекте вес заголовка равен трём, но итоговую релевантность вычисляет MongoDB.",
+    "sourceUrl": "https://docs.spring.io/spring-data/mongodb/reference/4.5/mongodb/template-query-operations.html"
+  },
+  {
+    "id": "d026",
+    "title": "Spring Data: оптимистическая блокировка",
+    "category": "MONGODB",
+    "text": "Поле Version защищает документ от записи устаревшего состояния. При конфликте клиент получает ошибку и должен повторно открыть актуальную запись.",
+    "sourceUrl": "https://docs.spring.io/spring-data/mongodb/reference/4.5/mongodb/template-crud-operations.html"
+  },
+  {
+    "id": "d027",
+    "title": "Docker: образы и контейнеры",
+    "category": "DOCKER",
+    "text": "Образ содержит основу окружения приложения. Контейнер запускает процесс в этом окружении; исходники проекта и исполняемые файлы подключаются отдельно.",
+    "sourceUrl": "https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/"
+  },
+  {
+    "id": "d028",
+    "title": "Docker Compose: описание сервисов",
+    "category": "DOCKER",
+    "text": "Compose описывает сервисы, сети и параметры запуска в YAML. Один файл проекта задаёт оба поисковых приложения, справочник и MongoDB.",
+    "sourceUrl": "https://docs.docker.com/compose/"
+  },
+  {
+    "id": "d029",
+    "title": "Docker: постоянные тома",
+    "category": "DOCKER",
+    "text": "Том Docker сохраняет данные независимо от жизненного цикла контейнера. База каталога использует постоянный том, а тестовая база хранит временные данные.",
+    "sourceUrl": "https://docs.docker.com/engine/storage/volumes/"
+  },
+  {
+    "id": "d030",
+    "title": "Docker Compose: зависимости и healthcheck",
+    "category": "DOCKER",
+    "text": "Проверка healthcheck помогает дождаться готовности зависимости. Запуск поисковых контейнеров настроен после готовности MongoDB.",
+    "sourceUrl": "https://docs.docker.com/compose/how-tos/startup-order/"
+  },
+  {
+    "id": "d031",
+    "title": "JUnit: модульные тесты",
+    "category": "TESTING",
+    "text": "Модульный тест проверяет небольшую часть логики изолированно. В проекте такие тесты проверяют параметры, формирование запросов и поведение служб.",
+    "sourceUrl": "https://docs.junit.org/5.12.2/user-guide/"
+  },
+  {
+    "id": "d032",
+    "title": "Spring: MockMvc",
+    "category": "TESTING",
+    "text": "MockMvc проверяет обработку запросов Spring MVC без развёртывания отдельного HTTP-сервера. Интеграционные проверки проекта дополняют тесты уровня контроллера.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/testing/mockmvc.html"
+  },
+  {
+    "id": "d033",
+    "title": "Spring: WebTestClient",
+    "category": "TESTING",
+    "text": "WebTestClient отправляет запросы и проверяет ответы реактивного приложения. Его можно использовать с действующим сервером и с тестовым контекстом.",
+    "sourceUrl": "https://docs.spring.io/spring-framework/reference/testing/webtestclient.html"
+  },
+  {
+    "id": "d034",
+    "title": "Project Reactor: StepVerifier",
+    "category": "TESTING",
+    "text": "StepVerifier проверяет значения, ошибки и завершение реактивной последовательности. Отдельные проверки проекта наблюдают отмену подписки и возврат разрешения семафора.",
+    "sourceUrl": "https://projectreactor.io/docs/core/release/reference/testing.html"
+  },
+  {
+    "id": "d035",
+    "title": "Spring Boot: интеграционные тесты",
+    "category": "TESTING",
+    "text": "SpringBootTest создаёт контекст приложения. Проверки с реальной MongoDB подтверждают сохранение документов, обновление индекса и конфликты версий.",
+    "sourceUrl": "https://docs.spring.io/spring-boot/3.5/reference/testing/spring-boot-applications.html"
+  },
+  {
+    "id": "d036",
+    "title": "Micrometer: счётчики и показатели",
+    "category": "TESTING",
+    "text": "MeterRegistry регистрирует показатели приложения. Счётчики проекта показывают поисковые запросы, неполные ответы и отказы перегрузки.",
+    "sourceUrl": "https://docs.micrometer.io/micrometer/reference/concepts.html"
+  }
+]
